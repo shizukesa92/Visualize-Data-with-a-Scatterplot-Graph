@@ -36,9 +36,9 @@ req.onload = () => {
 	// Note 2:1 ratio because container ratio is roughly 2:1
 	const padding = {
 			top: 50,
-			bottom: 0,
+			bottom: 50,
 			left: 100,
-			right: 0
+			right: 10
 		},
 		w = 1000 - padding.left - padding.right,
 		h = 550 - padding.top - padding.bottom;
@@ -80,7 +80,6 @@ req.onload = () => {
 		.call(xAxis)
 	chart.append("text")
 		.attr("transform", `translate(${(w+padding.right+padding.left)/2},${h+padding.bottom+padding.top})`)
-		.attr("dy", "2em")
 		.style("text-anchor", "middle")
 		.text("Seconds Behind Fastest Time");
 
@@ -92,7 +91,16 @@ req.onload = () => {
 		.attr("transform", "rotate(-90)")
 		.attr("y", padding.left + padding.right)
 		.attr("x", 0 - ((h + padding.top + padding.bottom) / 2))
-		.attr("dy", "-2em")
+		.attr("dy", "-3em")
 		.style("text-anchor", "middle")
 		.text("Ranking");
+
+	//Labels
+	chart.append("text")
+		.attr("x", (w / 2))
+		.attr("dx", "8em")
+		.attr("y", padding.top)
+		.attr("text-anchor", "middle")
+		.text("35 Fastest times up Alpe d'Huez Normalized to 13.8km distance")
+
 }
