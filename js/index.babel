@@ -349,3 +349,16 @@ const data = [{
 		"URL": ""
 	}
 ]
+
+
+// Initiating variables
+const tooltip = d3.tip() // https://github.com/Caged/d3-tip
+	.attr("class", "tooltip")
+	.html(d => {
+		let doping = `<span>{d.Name}</span><br/>{d.Year}<br/>{d.Nationality}`;
+		d.doping !== "" ?
+			doping += `<br/>{d.Doping}` :
+			doping += `<br/>No doping allegations`;
+
+		return doping;
+	});
