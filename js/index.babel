@@ -78,22 +78,10 @@ req.onload = () => {
 	chart.append("g")
 		.attr("transform", `translate(${padding.left},${h+padding.top})`)
 		.call(xAxis)
-	chart.append("text")
-		.attr("transform", `translate(${(w+padding.right+padding.left)/2},${h+padding.bottom+padding.top})`)
-		.style("text-anchor", "middle")
-		.text("Seconds Behind Fastest Time");
-
 
 	chart.append("g")
 		.attr("transform", `translate(${padding.left},${padding.top})`)
 		.call(yAxis)
-	chart.append("text")
-		.attr("transform", "rotate(-90)")
-		.attr("y", padding.left + padding.right)
-		.attr("x", 0 - ((h + padding.top + padding.bottom) / 2))
-		.attr("dy", "-3em")
-		.style("text-anchor", "middle")
-		.text("Ranking");
 
 	//Labels
 	chart.append("text")
@@ -103,4 +91,31 @@ req.onload = () => {
 		.attr("text-anchor", "middle")
 		.text("35 Fastest times up Alpe d'Huez Normalized to 13.8km distance")
 
+	chart.append("text")
+		.attr("transform", `translate(${(w+padding.right+padding.left)/2},${h+padding.bottom+padding.top})`)
+		.style("text-anchor", "middle")
+		.text("Seconds Behind Fastest Time");
+
+	chart.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", padding.left + padding.right)
+		.attr("x", 0 - ((h + padding.top + padding.bottom) / 2))
+		.attr("dy", "-3em")
+		.style("text-anchor", "middle")
+		.text("Ranking");
+
+	//Append Data as Circles
+	chart.selectAll("circle")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("class", "circle")
+		.attr("cx", d => {
+			return xScale(d.slower) + padding.left;
+		})
+		.attr("cy", d => {
+			return yScale(d.Place) + padding.top;
+		})
+		.attr("r", 5)
+		.attr("fill", d => d.Doping == "" ? "black" : "red");
 }
