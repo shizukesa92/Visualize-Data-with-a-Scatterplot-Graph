@@ -84,19 +84,19 @@ req.onload = () => {
 		.call(yAxis)
 
 	//Labels
-	chart.append("text")
+	chart.append("text") // Title
 		.attr("x", (w / 2))
 		.attr("dx", "8em")
 		.attr("y", padding.top)
 		.attr("text-anchor", "middle")
 		.text("35 Fastest times up Alpe d'Huez Normalized to 13.8km distance")
 
-	chart.append("text")
+	chart.append("text") // X-axis
 		.attr("transform", `translate(${(w+padding.right+padding.left)/2},${h+padding.bottom+padding.top})`)
 		.style("text-anchor", "middle")
 		.text("Seconds Behind Fastest Time");
 
-	chart.append("text")
+	chart.append("text") // Y axis
 		.attr("transform", "rotate(-90)")
 		.attr("y", padding.left + padding.right)
 		.attr("x", 0 - ((h + padding.top + padding.bottom) / 2))
@@ -104,18 +104,72 @@ req.onload = () => {
 		.style("text-anchor", "middle")
 		.text("Ranking");
 
+	// Legend
+	chart.append("circle")
+		.attr("cx", d =>
+			xScale(10)
+		)
+		.attr("cy", d =>
+			yScale(20)
+		)
+		.attr("r", 5)
+		.attr("fill", "black");
+
+	chart.append("text")
+		.attr("x", d =>
+			xScale(7)
+		)
+		.attr("y", d =>
+			yScale(20) + 4
+		)
+		.attr("text-anchor", "left")
+		.text("No doping allegations");
+
+	chart.append("circle")
+		.attr("cx", d =>
+			xScale(10)
+		)
+		.attr("cy", d =>
+			yScale(23)
+		)
+		.attr("r", 5)
+		.attr("fill", "red");
+
+	chart.append("text")
+		.attr("x", d =>
+			xScale(7)
+		)
+		.attr("y", d =>
+			yScale(23) + 4
+		)
+		.attr("text-anchor", "left")
+		.text("Riders with doping allegations");
+
 	//Append Data as Circles
 	chart.selectAll("circle")
 		.data(data)
 		.enter()
 		.append("circle")
 		.attr("class", "circle")
-		.attr("cx", d => {
-			return xScale(d.slower) + padding.left;
-		})
-		.attr("cy", d => {
-			return yScale(d.Place) + padding.top;
-		})
+		.attr("cx", d =>
+			xScale(d.slower) + padding.left
+		)
+		.attr("cy", d =>
+			yScale(d.Place) + padding.top
+		)
 		.attr("r", 5)
 		.attr("fill", d => d.Doping == "" ? "black" : "red");
+
+	chart.selectAll("text")
+		.data(data)
+		.enter()
+		.append("text")
+		.text(d =>
+			d.Name
+		)
+		.attr("x", d =>
+			xScale(d.slower) + padding.left
+		)
+		.attr("y", d => yScale(d.Place) + padding.top)
+		.attr("transform", "translate(15,+4)");
 }
