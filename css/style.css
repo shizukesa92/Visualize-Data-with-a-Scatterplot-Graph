@@ -60,3 +60,18 @@ h1 {
         justify-content: center;
         align-items: center;
 }
+
+.tooltip {
+        margin: 0 auto;
+        position: absolute;
+        width: 200px;
+        pointer-events: pointer;
+        width: 150px;
+        line-height: 1.2;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+        font-size: 1.2em;
+}

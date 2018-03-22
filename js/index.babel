@@ -26,12 +26,10 @@ req.onload = () => {
 	})) // https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects?
 	data.forEach(cyclist => {
 		cyclist.slower = cyclist.Seconds - fastest;
-		cyclist.Doping != "" ?
-			cyclist.legend = "Doping Allegations" :
-			cyclist.legend = "No Doping Allegation";
+		cyclist.legend = cyclist.Doping != "" ? "Doping Allegations" :
+			"No Doping Allegation";
 
 	});
-
 	// Relative height and width of the SVG. Actual height and width are defined within CSS and not appended (contrary to what FCC tutorial taught) 
 	// Note 2:1 ratio because container ratio is roughly 2:1
 	const padding = {
@@ -158,18 +156,48 @@ req.onload = () => {
 			yScale(d.Place) + padding.top
 		)
 		.attr("r", 5)
-		.attr("fill", d => d.Doping == "" ? "black" : "red");
+		.attr("fill", d => d.Doping == "" ? "black" : "red")
+		.attr("data-legend", d =>
+			d.legend
+		)
+		.on("mouseover", d => {
+			tooltips.transition()
+				.duration(200)
+				.style("opacity", .9);
+			tooltips.html(create(d)) // Function defined below
+				.style("left", (w / 2) + "px")
+				.style("top", (280) + "px");
+		});
 
 	chart.selectAll("text")
 		.data(data)
 		.enter()
 		.append("text")
-		.text(d =>
-			d.Name
+		.text((d, i) =>
+			d[i].Name
 		)
-		.attr("x", d =>
+		.attr("x", (d, i) =>
 			xScale(d.slower) + padding.left
 		)
-		.attr("y", d => yScale(d.Place) + padding.top)
+		.attr("y", (d, i) => yScale(d.Place) + padding.top)
 		.attr("transform", "translate(15,+4)");
+
+	// Tooltip
+	let tooltips = d3.select("body")
+		.append("div")
+		.attr("class", "tooltip")
+		.style("opacity", 0)
+	let create = (d) => {
+		let tooltip = "<span class = 'name'>" + d.Name + ": " + d.Nationality + "</span>";
+		tooltip += "<br/>Year: " + d.Year + ", Time: " + friendlySeconds(d.Seconds) + "<br/>";
+		d.doping !== "" ?
+			tooltip += "<br/>" + d.Doping :
+			tooltip += "<br/>No Doping Allegation";
+
+		return tooltip;
+	}
+	const friendlySeconds = (seconds) => {
+		return parseInt(seconds / 60) + ":" + seconds % 60;
+	}
+
 }
