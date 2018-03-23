@@ -165,39 +165,24 @@ req.onload = () => {
 				.duration(200)
 				.style("opacity", .9);
 			tooltips.html(create(d)) // Function defined below
-				.style("left", (w / 2) + "px")
-				.style("top", (280) + "px");
+				.style("left", (d3.event.pageX + 20) + "px") //https://bl.ocks.org/mbostock/1087001
+				.style("top", (d3.event.pageY + 20) + "px");
 		});
 
-	chart.selectAll("text")
-		.data(data)
-		.enter()
-		.append("text")
-		.text((d, i) =>
-			d.Name
-		)
-		.attr("x", (d, i) =>
-			xScale(d.slower) + padding.left
-		)
-		.attr("y", (d, i) => yScale(d.Place) + padding.top)
-		.attr("transform", "translate(15,+4)");
 
 	// Tooltip
-	let tooltips = d3.select("body")
+	let tooltips = d3.select("#chart")
 		.append("div")
 		.attr("class", "tooltip")
 		.style("opacity", 0)
 	let create = (d) => {
-		let tooltip = "<span class = 'name'>" + d.Name + ": " + d.Nationality + "</span>";
-		tooltip += "<br/>Year: " + d.Year + ", Time: " + friendlySeconds(d.Seconds) + "<br/>";
+		let tooltip = `<span> ${d.Name} : ${d.Nationality} </span>`;
+		tooltip += `<br/>Year: ${d.Year}, Time: ${parseInt(d.Seconds / 60)}:${d.Seconds % 60}<br/>`;
 		d.doping !== "" ?
 			tooltip += "<br/>" + d.Doping :
 			tooltip += "<br/>No Doping Allegation";
 
 		return tooltip;
-	}
-	const friendlySeconds = (seconds) => {
-		return parseInt(seconds / 60) + ":" + seconds % 60;
 	}
 
 }
