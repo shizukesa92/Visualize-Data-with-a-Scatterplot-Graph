@@ -174,7 +174,7 @@ req.onload = () => {
 		.enter()
 		.append("text")
 		.text((d, i) =>
-			d[i].Name
+			d.Name
 		)
 		.attr("x", (d, i) =>
 			xScale(d.slower) + padding.left
